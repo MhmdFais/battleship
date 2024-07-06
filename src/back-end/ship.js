@@ -10,14 +10,17 @@ export function hitShip(shipName) {
   const ship = ships.find((ship) => ship.name === shipName);
   if (!ship) {
     console.log("Incorrect ship name");
-    return;
+    return false;
   }
   ship.hits++;
-  isSunken(ship);
+  return isSunken(ship);
 }
 
-export function isSunken(ship) {
+function isSunken(ship) {
   if (ship.hits >= ship.length) {
     ship.isSunk = true;
+    return true;
+  } else {
+    return false;
   }
 }
