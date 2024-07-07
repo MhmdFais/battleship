@@ -1,4 +1,4 @@
-import { hitShip } from "./ship";
+import { hitShip } from "../ship";
 
 test("Hit shipOne: Alive", () => {
   const shipName = "shipOne";
