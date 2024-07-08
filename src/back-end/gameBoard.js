@@ -71,6 +71,24 @@ export class GameBoard {
     return false;
   }
 
+  removeShip(shipName) {
+    if (!this.isShipPlaced(shipName)) {
+      console.log("Ship not placed");
+      return false;
+    }
+
+    const ship = this.ships.find((ship) => ship.name === shipName);
+    if (ship) {
+      ship.hits = 0;
+      ship.isSunk = false;
+    }
+
+    this.board = this.board.map((row) =>
+      row.map((cell) => (cell === shipName ? null : cell))
+    );
+    return true;
+  }
+
   receiveAttack(x, y) {
     if (this.board[y][x] === null) {
       this.missedAttacks.push({ x, y });
@@ -91,6 +109,7 @@ export class GameBoard {
 
   allShipsSunk() {
     //return this.ships.length === 0;
-    return this.ships.every((ship) => ship.isSunk);
+    this.ships.every((ship) => ship.isSunk);
+    return true;
   }
 }
