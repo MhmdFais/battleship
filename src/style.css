@@ -2,3 +2,7 @@
     font-family: mainFont;
     src: url('./font/campus.ttf');
 }
+
+body{
+    font-family: mainFont;
+}

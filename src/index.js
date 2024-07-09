@@ -23,3 +23,10 @@ function createNameTextboxPopup() {
 
   nameWrapper.appendChild(dialogModal);
 }
+
+// show thw dialog modal when the page loads
+createNameTextboxPopup();
+
+window.onload = function () {
+  dialogModal.showModal();
+};
