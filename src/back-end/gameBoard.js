@@ -1,11 +1,13 @@
 import { ships } from "./ship";
 import { hitShip } from "./ship";
 
+const BOARD_SIZE = 10;
+
 export class GameBoard {
   constructor() {
-    this.board = Array(15)
+    this.board = Array(BOARD_SIZE)
       .fill(null)
-      .map(() => Array(15).fill(null));
+      .map(() => Array(BOARD_SIZE).fill(null));
     this.ships = [...ships];
     this.missedAttacks = [];
     this.hitAttacks = [];
@@ -50,9 +52,9 @@ export class GameBoard {
 
   isShipOutOfBounds(ship, x, y, direction) {
     if (direction === "horizontal") {
-      return x + ship.length > 15;
+      return x + ship.length > BOARD_SIZE;
     } else {
-      return y + ship.length > 15;
+      return y + ship.length > BOARD_SIZE;
     }
   }
 
