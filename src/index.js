@@ -1,14 +1,13 @@
 import "./style.css";
 
-const nameTextBox = document.querySelector("#name");
-const nameBtn = document.querySelector("#name-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const nameTextBox = document.querySelector("#name");
+  const form = document.querySelector("#get-name");
 
-function getNameFromUser() {
-  const name = nameTextBox.value;
-
-  nameBtn.addEventListener("click", () => {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = nameTextBox.value;
     console.log(name);
+    nameTextBox.value = "";
   });
-}
-
-getNameFromUser();
+});

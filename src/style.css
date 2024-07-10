@@ -80,3 +80,30 @@ form button:hover{
     /* background-color: var(--btn-hover-color); */
     box-shadow: none;
 }
+
+
+/* Footer */
+
+footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    font-size: clamp(0.8rem, 1vw, 1.2rem);
+}
+
+footer img{
+    height: 2rem;
+    width: 2rem;
+}
+
+footer a{
+    text-decoration: none;
+    font-size: clamp(0.8rem, 1vw, 1.2rem);
+    color: rgb(78, 36, 36);
+}
