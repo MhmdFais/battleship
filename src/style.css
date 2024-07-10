@@ -1,3 +1,17 @@
+:root{
+    --main-bg-color: #e9f1fb;
+    --name-container-bg-color:#94a3b8;
+    --name-container-shadow-color: #64748b;
+    --btn-color: #d4d4d4;
+    --btn-hover-color: #b1afaf;
+}
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
 @font-face{
     font-family: mainFont;
     src: url('./font/campus.ttf');
@@ -5,4 +19,62 @@
 
 body{
     font-family: mainFont;
+    background-color: var(--main-bg-color);
+}
+
+.body-part-conatiner{
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(1rem, 1vh, 2rem);
+}
+
+/* Name Text Box */
+
+.name-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: clamp(0.5rem, 1vh, 1.5rem);
+    background-color: var(--name-container-bg-color);
+    padding: 2vh 2vw;
+    padding-bottom: 3vw;
+    border-radius: 1rem;
+    box-shadow: 0 0 0.4rem var(--name-container-shadow-color);    
+}
+
+.enter-name-text{
+    font-size: clamp(1.5rem, 2.5vw, 3rem);
+    color: black;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.5rem, 1.5vh, 1.5rem);
+}
+
+input[type="text"]{
+    height: 5.8vh;
+    width: 30vw;
+    padding: 0.5rem;
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    border: none;
+    font-family: mainFont;
+}
+
+form button{
+    height: 5.8vh;
+    width: 30vw;
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    font-family: mainFont;
+    border: none;
+    cursor: pointer;
+    background-color: var(--btn-color);
+}
+
+form button:hover{
+    background-color: var(--btn-hover-color);
 }
