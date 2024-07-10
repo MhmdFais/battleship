@@ -1,32 +1,13 @@
 import "./style.css";
 
-const nameWrapper = document.querySelector(".name-textbox-popup-wrapper");
-const dialogModal = document.querySelector(".dialog-modal");
+document.addEventListener("DOMContentLoaded", () => {
+  const nameTextBox = document.querySelector("#name");
+  const form = document.querySelector("#get-name");
 
-function createNameTextboxPopup() {
-  const enterNameText = document.createElement("p");
-  enterNameText.innerHTML = "Enter your name";
-  enterNameText.classList.add("enter-name-text");
-
-  const nameTextbox = document.createElement("input");
-  nameTextbox.setAttribute("type", "text");
-  nameTextbox.setAttribute("placeholder", "Enter your name");
-  nameTextbox.classList.add("name-textbox");
-
-  const submitButton = document.createElement("button");
-  submitButton.innerHTML = "Submit";
-  submitButton.classList.add("submit-button");
-
-  dialogModal.appendChild(enterNameText);
-  dialogModal.appendChild(nameTextbox);
-  dialogModal.appendChild(submitButton);
-
-  nameWrapper.appendChild(dialogModal);
-}
-
-// show thw dialog modal when the page loads
-createNameTextboxPopup();
-
-window.onload = function () {
-  dialogModal.showModal();
-};
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = nameTextBox.value;
+    console.log(name);
+    nameTextBox.value = "";
+  });
+});
