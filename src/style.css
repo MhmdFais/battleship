@@ -56,7 +56,7 @@ form{
     gap: clamp(0.5rem, 1.5vh, 1.5rem);
 }
 
-input[type="text"]{
+#name{
     height: 5.8vh;
     width: 30vw;
     padding: 0.5rem;
@@ -73,8 +73,10 @@ form button{
     border: none;
     cursor: pointer;
     background-color: var(--btn-color);
+    box-shadow: 0 0 0.78rem var(--name-container-shadow-color);
 }
 
 form button:hover{
-    background-color: var(--btn-hover-color);
+    /* background-color: var(--btn-hover-color); */
+    box-shadow: none;
 }
