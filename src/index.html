@@ -7,27 +7,27 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="name-textbox-popup-wrapper">
-      <dialog data-modal class="dialog-modal"></dialog>
+    <div class="name-container">
+      <form action="#" id="get-name">
+        <input type="text" id="name" placeholder="Enter Your Name" />
+        <button type="submit"></button>
+        <!-- Confirm Name Text -->
+      </form>
     </div>
-    <div class="main-content-container">
-      <div class="header-container">
-        <div class="header"></div>
+    <div class="human-board-container">
+      <h2 class="user-board-arrange-text"></h2>
+      <!-- select the ship is horizontal or vertical -->
+      <div class="ship-orientation">
+        <button class="horizontal"></button>
+        <!-- Horizontal first and at click changes to vertical -->
       </div>
-      <div class="game-boards-and-names-container">
-        <div class="names-container">
-          <div class="player-name" class="name"></div>
-          <div class="computer-name" class="name"></div>
-        </div>
-        <div class="game-boards-container">
-          <div class="player-game-board-container">
-            <div class="player-game-board"></div>
-          </div>
-          <div class="computer-game-board-container">
-            <div class="computer-game-board"></div>
-          </div>
-        </div>
-      </div>
+      <div class="human-board"></div>
+      <a href="#" class="start-game"></a>
+    </div>
+    <div class="computer-board-container">
+      <h2></h2>
+      <!-- AI -->
+      <div class="computer-board"></div>
     </div>
     <script src="./index.js"></script>
   </body>
