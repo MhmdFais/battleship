@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const humanBoardContainer = document.querySelector(".human-board-container");
   const boardArrangeText = document.querySelector(".user-board-arrange-text");
 
+  const shipOrientationDiv = document.querySelector(".ship-orientation");
+  const orientationBtn = document.querySelector(".orie-btn");
+  const humanBoardDiv = document.querySelector(".human-board");
+  const startGameText = document.querySelector(".start-game");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const name = nameTextBox.value;
@@ -26,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showMessage(name) {
-    boardArrangeText.textContent = `Hello ${name} please arrange your ships on the board`;
+    boardArrangeText.textContent = `Hello ${name} !! please arrange your ships on the board`;
   }
 
   function enableDisplay() {

@@ -15,7 +15,7 @@
 
 @font-face{
     font-family: mainFont;
-    src: url('./font/campus.ttf');
+    src: url('./font/Colleged.ttf');
 }
 
 body{
@@ -82,6 +82,12 @@ form button:hover{
     box-shadow: none;
 }
 
+/* User Board Section */
+
+.user-board-arrange-text{
+    font-family: mainFont;
+    font-size: clamp(1.5rem, 2.5vw, 3rem);
+}
 
 /* Footer */
 footer{
