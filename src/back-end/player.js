@@ -7,6 +7,10 @@ export class Player {
     this.gameBoard = new GameBoard();
   }
 
+  placeShipOnBoard(shipName, x, y, direction) {
+    return this.gameBoard.placeShip(shipName, x, y, direction);
+  }
+
   playerAttack(x, y, enemy) {
     return enemy.gameBoard.receiveAttack(x, y);
   }

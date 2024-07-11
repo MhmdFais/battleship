@@ -1,5 +1,5 @@
 import "./style.css";
-// import { enablePlayerBoardDisplay } from "./front-end/playersBoard";
+import { createPlayerBoard } from "./front-end/playersBoard";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameContainer = document.querySelector(".name-container");
@@ -20,18 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(name);
     nameTextBox.value = "";
 
-    enablePlayerBoardDisplay(name);
-
     nameContainer.style.display = "none";
+
+    enablePlayerBoardDisplay(name);
   });
 
   function enablePlayerBoardDisplay(name) {
     enableDisplay();
     showMessage(name);
+    createPlayerBoard(
+      shipOrientationDiv,
+      orientationBtn,
+      humanBoardDiv,
+      startGameText,
+      name
+    );
   }
 
   function showMessage(name) {
-    boardArrangeText.textContent = `Hello ${name} !! please arrange your ships on the board`;
+    boardArrangeText.textContent = `Hello ${name} !! arrange your ships on the board`;
   }
 
   function enableDisplay() {

@@ -89,6 +89,29 @@ form button:hover{
     font-size: clamp(1.5rem, 2.5vw, 3rem);
 }
 
+.ship-orientation{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 2vh;
+}
+
+.ship-orientation p{
+    font-size: clamp(0.7rem, 1.25vw, 1.5rem);
+    font-family: mainFont;
+}
+
+.ship-orientation button{
+    font-size: clamp(0.7rem, 1.25vw, 1.5rem);
+    font-family: mainFont;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    color: rgb(76, 135, 183);
+}
+
 /* Footer */
 footer{
     position: fixed;
