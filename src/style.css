@@ -112,6 +112,41 @@ form button:hover{
     color: rgb(76, 135, 183);
 }
 
+/* Boards */
+
+.human-board,
+.computer-board{
+    display: grid;
+    grid-template-columns: repeat(10, clamp(2.5vw, 2.5vh, 3vw));
+    grid-template-rows: repeat(10, clamp(2.5vw, 2.5vh, 3vw));
+    gap: 0.1rem;
+    width: 30vw;
+    height: 30vw;
+    border: 0.1rem solid black;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.4rem var(--name-container-shadow-color);
+}
+
+.human-board div,
+.computer-board div {
+    height: 30vh;
+    width: 30vh;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
+
+.ship {
+  background-color: #00f;
+}
+
+.miss {
+  background-color: #f00;
+}
+
+.hit {
+  background-color: #0f0;
+}
+
 /* Footer */
 footer{
     position: fixed;
