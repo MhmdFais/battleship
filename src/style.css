@@ -4,6 +4,7 @@
     --name-container-shadow-color: #64748b;
     --btn-color: #d4d4d4;
     --btn-hover-color: #b1afaf;
+    --footer-name-color: rgb(78, 36, 36);
 }
 
 *{
@@ -83,7 +84,6 @@ form button:hover{
 
 
 /* Footer */
-
 footer{
     position: fixed;
     bottom: 0;
@@ -105,5 +105,5 @@ footer img{
 footer a{
     text-decoration: none;
     font-size: clamp(0.8rem, 1vw, 1.2rem);
-    color: rgb(78, 36, 36);
+    color: var(--footer-name-color);
 }

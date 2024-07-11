@@ -1,10 +1,13 @@
 import "./style.css";
-import PlayersBoard from "./front-end/playersBoard";
+// import { enablePlayerBoardDisplay } from "./front-end/playersBoard";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameContainer = document.querySelector(".name-container");
   const nameTextBox = document.querySelector("#name");
   const form = document.querySelector("#get-name");
+
+  const humanBoardContainer = document.querySelector(".human-board-container");
+  const boardArrangeText = document.querySelector(".user-board-arrange-text");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -12,8 +15,21 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(name);
     nameTextBox.value = "";
 
-    const player = new PlayersBoard(name);
+    enablePlayerBoardDisplay(name);
 
     nameContainer.style.display = "none";
   });
+
+  function enablePlayerBoardDisplay(name) {
+    enableDisplay();
+    showMessage(name);
+  }
+
+  function showMessage(name) {
+    boardArrangeText.textContent = `Hello ${name} please arrange your ships on the board`;
+  }
+
+  function enableDisplay() {
+    humanBoardContainer.style.display = "block";
+  }
 });

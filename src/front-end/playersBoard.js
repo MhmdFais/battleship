@@ -3,24 +3,16 @@ import Player from "../back-end/player";
 const humanBoardContainer = document.querySelector(".human-board-container");
 const boardArrangeText = document.querySelector(".user-board-arrange-text");
 
-export class PlayersBoard {
-  constructor(name) {
-    this.name = name;
-    this.newPlayer = new Player(this.name, false);
-    render();
-  }
+export function enablePlayerBoardDisplay(name) {
+  //const player = new Player(name, false);
+  enableDisplay();
+  showMessage(name);
+}
 
-  enableDisplay() {
-    humanBoardContainer.style.display = "block";
-    boardArrangeText.style.display = "block";
-  }
+function showMessage(name) {
+  boardArrangeText.textContent = `Hello ${name}!, please arrange your ships on the board`;
+}
 
-  displayMessage() {
-    boardArrangeText.textContent = `Hello ${this.name}!,Arrange your ships`;
-  }
-
-  render() {
-    enableDisplay();
-    displayMessage();
-  }
+function enableDisplay() {
+  humanBoardContainer.style.display = "block";
 }
