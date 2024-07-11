@@ -8,6 +8,7 @@ export function createPlayerBoard(
   name
 ) {
   getOrientation(orientationBtn);
+  displayBoard(humanBoardDiv, name);
 }
 
 function getOrientation(orientationBtn) {
@@ -29,4 +30,8 @@ function getOrientation(orientationBtn) {
     }
     console.log(`Button ID changed to: ${orientationBtn.id}`);
   });
+}
+
+function displayBoard(humanBoardDiv, name) {
+  const player = new Player(name, false);
 }

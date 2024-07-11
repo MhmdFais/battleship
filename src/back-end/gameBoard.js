@@ -3,7 +3,7 @@ import { hitShip } from "./ship";
 
 const BOARD_SIZE = 10;
 
-export class GameBoard {
+class GameBoard {
   constructor() {
     this.board = Array(BOARD_SIZE)
       .fill(null)
@@ -115,3 +115,5 @@ export class GameBoard {
     return true;
   }
 }
+
+export default GameBoard;

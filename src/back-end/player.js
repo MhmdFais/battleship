@@ -1,6 +1,6 @@
 import { GameBoard } from "./gameBoard";
 
-export class Player {
+class Player {
   constructor(playerName, isComputer) {
     this.name = playerName;
     this.isComputer = isComputer;
@@ -21,3 +21,5 @@ export class Player {
     return enemy.gameBoard.receiveAttack(x, y);
   }
 }
+
+export default Player;
