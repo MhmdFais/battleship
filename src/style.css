@@ -123,14 +123,14 @@ form button:hover{
     width: 30vw;
     height: 30vw;
     border: 0.1rem solid black;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     box-shadow: 0 0 0.4rem var(--name-container-shadow-color);
 }
 
 .human-board div,
 .computer-board div {
-    height: 30vh;
-    width: 30vh;
+    width: 100%;
+    height: 100%;
     border: 1px solid #000;
     box-sizing: border-box;
 }
