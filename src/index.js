@@ -28,13 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function enablePlayerBoardDisplay(name) {
     enableDisplay();
     showMessage(name);
-    createPlayerBoard(
-      shipOrientationDiv,
-      orientationBtn,
-      humanBoardDiv,
-      startGameText,
-      name
-    );
+    // createPlayerBoard(
+    //   shipOrientationDiv,
+    //   orientationBtn,
+    //   humanBoardDiv,
+    //   startGameText,
+    //   name
+    // );
   }
 
   function showMessage(name) {

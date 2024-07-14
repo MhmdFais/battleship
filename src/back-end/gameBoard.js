@@ -1,71 +1,232 @@
-import { ships } from "./ship";
-import { hitShip } from "./ship";
-
-const BOARD_SIZE = 10;
+import { Ship } from "./ship";
 
 class GameBoard {
   constructor() {
-    this.board = Array(BOARD_SIZE)
-      .fill(null)
-      .map(() => Array(BOARD_SIZE).fill(null));
-    this.ships = [...ships];
-    this.missedAttacks = [];
-    this.hitAttacks = [];
+    this.ships = [];
+    this.missedShots = [];
+    this.hitShots = [];
+    this.currentCoords = [];
+    this.surroundingCoords = [];
+    this.surroundingShots = [];
+    this.generateShipMap();
   }
 
-  placeShip(shipName, x, y, direction) {
-    const ship = this.ships.find((ship) => ship.name === shipName);
-    if (!ship) {
-      console.log("Incorrect ship name");
+  receiveAttack(coordinates) {
+    const ship = this.getShip(coordinates);
+
+    if (ship && !ship.sunk) {
+      ship.hit();
+      this.hitShots.push(coordinates);
+      this.currentCoords.splice(
+        findIndexofItemInArray(this.currentCoords, coordinates),
+        1
+      );
+      return true;
+    } else {
+      this.missedShots.push(coordinates);
       return false;
     }
+  }
 
-    if (this.isShipPlaced(shipName)) {
-      console.log("Ship already placed");
-      return false;
+  hasAllShipsBeenSunk() {
+    return this.ships.every((ship) => ship.sunk);
+  }
+
+  getShip(coordinates) {
+    for (const ship of this.ships) {
+      for (const coordinate of ship.coordinates) {
+        if (arraysEqual(coordinate, coordinates)) {
+          return ship.ship;
+        }
+      }
+    }
+    return false;
+  }
+
+  getShipSurroundingCoords(coordinate) {
+    for (const ship of this.ships) {
+      for (const coord of ship.coords) {
+        if (arraysEqual(coord, coordinate)) {
+          return ship.surroundingCoords;
+        }
+      }
+    }
+    return null;
+  }
+
+  generateShipMap() {
+    const shipLengths = [5, 4, 3, 3, 2];
+    for (const length of shipLengths) {
+      this.ships.push(this.createShip(length));
+    }
+    this.surroundingCoords = removeDuplicateArrays(this.surroundingCoords);
+  }
+
+  createShip(length, x_coord = null, y_coord = null) {
+    const { coords, surroundingCoords } = this.generateCoords(
+      length,
+      x_coord,
+      y_coord
+    );
+  }
+
+  generateCoord(length, x_coord = null, y_coord = null) {
+    let x = x_coord === null ? Math.floor(Math.random() * 10) : x_coord;
+    let y = y_coord === null ? Math.floor(Math.random() * 10) : y_coord;
+    let direction = Math.random() > 0.5 ? "horizontal" : "vertical";
+    let attempts = 0;
+    const maxAttempts = 200;
+    const coords = [];
+    const surroundingCoords = [];
+
+    while (attempts < maxAttempts) {
+      attempts++;
+      if (
+        this.isValidCoord(x, y, length, direction) &&
+        !this.predictCollisionWithCurrentCoords(x, y, length, direction) &&
+        !this.predictCollisionWithSurroundingCoords(x, y, length, direction)
+      ) {
+        break;
+      }
+      x = Math.floor(Math.random() * 10);
+      y = Math.floor(Math.random() * 10);
     }
 
-    if (this.isShipOutOfBounds(ship, x, y, direction)) {
-      console.log("Ship out of bounds");
-      return false;
-    }
-
-    if (this.isShipColliding(ship, x, y, direction)) {
-      console.log("Ship colliding with another ship");
-      return false;
-    }
-
-    for (let i = 0; i < ship.length; i++) {
+    for (let i = 0; i < length; i++) {
       if (direction === "horizontal") {
-        this.board[y][x + i] = ship.name;
+        coords.push([x + i, y]);
+        this.currentCoords.push([x + i, y]);
       } else {
-        this.board[y + i][x] = ship.name;
+        coords.push([x, y + i]);
+        this.currentCoords.push([x, y + i]);
       }
     }
 
-    return true;
+    surroundingCoords = this.getSurroundingCoords(coords, length, direction);
+    this.surroundingCoords.push(...surroundingCoords);
+
+    return { coords, surroundingCoords };
   }
 
-  isShipPlaced(shipName) {
-    return this.board.flat().includes(shipName);
+  getSurroundingCoords(coords, length, direction) {
+    const surroundingCoords = [];
+
+    surroundingCoords.push(this.getUpperRowCoords(coords, length, direction));
+    surroundingCoords.push(this.getLowerRowCoords(coords, length, direction));
+    surroundingCoords.push(this.getLeftColumnCoords(coords, length, direction));
+    surroundingCoords.push(
+      this.getRightColumnCoords(coords, length, direction)
+    );
+
+    return surroundingCoords;
   }
 
-  isShipOutOfBounds(ship, x, y, direction) {
-    if (direction === "horizontal") {
-      return x + ship.length > BOARD_SIZE;
-    } else {
-      return y + ship.length > BOARD_SIZE;
+  getUpperRowCoords(coords, length, direction) {
+    const upperRowCoords = [];
+    let [x_coord, y_coord] = coords[0];
+
+    y_coord--;
+    x_coord--;
+
+    let upperRowLength = direction === "horizontal" ? length + 2 : 3;
+    let upperRowWidth = direction === "horizontal" ? 3 : length + 2;
+
+    // check the bound also
+    for (let i = 0; i < upperRowLength; i++) {
+      for (let j = 0; j < upperRowWidth; j++) {
+        upperRowCoords.push([x_coord + i, y_coord + j]);
+      }
     }
+
+    return upperRowCoords;
   }
 
-  isShipColliding(ship, x, y, direction) {
-    for (let i = 0; i < ship.length; i++) {
+  getLowerRowCoords(coords, length, direction) {
+    const lowerRowCoords = [];
+    let [x_coord, y_coord] = coords[coords.length - 1];
+
+    y_coord++;
+    x_coord--;
+
+    let lowerRowLength = direction === "horizontal" ? length + 2 : 3;
+    let lowerRowWidth = direction === "horizontal" ? 3 : length + 2;
+
+    // check the bound also
+    for (let i = 0; i < lowerRowLength; i++) {
+      for (let j = 0; j < lowerRowWidth; j++) {
+        lowerRowCoords.push([x_coord + i, y_coord + j]);
+      }
+    }
+
+    return lowerRowCoords;
+  }
+
+  getLeftColumnCoords(coords, length, direction) {
+    const leftColumnCoords = [];
+    let [x_coord, y_coord] = coords[0];
+
+    y_coord--;
+    x_coord--;
+
+    let leftColumnLength = direction === "horizontal" ? 3 : length + 2;
+    let leftColumnWidth = direction === "horizontal" ? length + 2 : 3;
+
+    // check the bound also
+    for (let i = 0; i < leftColumnLength; i++) {
+      for (let j = 0; j < leftColumnWidth; j++) {
+        leftColumnCoords.push([x_coord + i, y_coord + j]);
+      }
+    }
+
+    return leftColumnCoords;
+  }
+
+  getRightColumnCoords(coords, length, direction) {
+    const rightColumnCoords = [];
+    let [x_coord, y_coord] = coords[coords.length - 1];
+
+    y_coord--;
+    x_coord++;
+
+    let rightColumnLength = direction === "horizontal" ? 3 : length + 2;
+    let rightColumnWidth = direction === "horizontal" ? length + 2 : 3;
+
+    // check the bound also
+    for (let i = 0; i < rightColumnLength; i++) {
+      for (let j = 0; j < rightColumnWidth; j++) {
+        rightColumnCoords.push([x_coord + i, y_coord + j]);
+      }
+    }
+
+    return rightColumnCoords;
+  }
+
+  predictCollisionWithSurroundingCoords(x, y, length, direction) {
+    const surroundingCoords = this.getSurroundingCoords(
+      [[x, y]],
+      length,
+      direction
+    );
+    for (const coord of surroundingCoords) {
+      if (this.surroundingCoords.some((c) => arraysEqual(c, coord))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  predictCollisionWithCurrentCoords(x, y, length, direction) {
+    for (let i = 0; i < length; i++) {
       if (direction === "horizontal") {
-        if (this.board[y][x + i]) {
+        if (
+          this.currentCoords.some((coord) => arraysEqual(coord, [x + i, y]))
+        ) {
           return true;
         }
       } else {
-        if (this.board[y + i][x]) {
+        if (
+          this.currentCoords.some((coord) => arraysEqual(coord, [x, y + i]))
+        ) {
           return true;
         }
       }
@@ -73,47 +234,35 @@ class GameBoard {
     return false;
   }
 
-  removeShip(shipName) {
-    if (!this.isShipPlaced(shipName)) {
-      console.log("Ship not placed");
-      return false;
+  isValidCoord(x, y, length, direction) {
+    if (direction === "horizontal") {
+      return x + length <= 10;
+    } else {
+      return y + length <= 10;
     }
-
-    const ship = this.ships.find((ship) => ship.name === shipName);
-    if (ship) {
-      ship.hits = 0;
-      ship.isSunk = false;
-    }
-
-    this.board = this.board.map((row) =>
-      row.map((cell) => (cell === shipName ? null : cell))
-    );
-    return true;
-  }
-
-  receiveAttack(x, y) {
-    if (this.board[y][x] === null) {
-      this.missedAttacks.push({ x, y });
-      //this.board[y][x] = "miss";
-      return false;
-    }
-
-    const shipName = this.board[y][x];
-    this.hitAttacks.push({ x, y });
-    //this.board[y][x] = "hit";
-    const isSunk = hitShip(shipName);
-    if (isSunk) {
-      this.ships = this.ships.filter((ship) => ship.name !== shipName);
-      console.log("Ship sunk");
-    }
-    return true;
-  }
-
-  allShipsSunk() {
-    //return this.ships.length === 0;
-    this.ships.every((ship) => ship.isSunk);
-    return true;
   }
 }
 
-export default GameBoard;
+function findIndexofItemInArray(array, item) {
+  for (let i = 0; i < array.length; i++) {
+    if (arraysEqual(array[i], item)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = arr1.length; i--; ) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+}
+
+function removeDuplicateArrays(arrays) {
+  const uniqueArrays = new Set(arrays.map(JSON.stringify));
+  return Array.from(uniqueArrays).map(JSON.parse);
+}
+
+export { GameBoard };

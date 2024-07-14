@@ -1,4 +1,8 @@
-import Player from "../back-end/player";
+import { createPlayer } from "../back-end/player";
+import { ships, hitShip } from "./ship";
+
+let currentIndex = 0;
+//let player;
 
 export function createPlayerBoard(
   shipOrientationDiv,
@@ -7,8 +11,9 @@ export function createPlayerBoard(
   startGameText,
   name
 ) {
+  const player = createPlayer(name, false);
   getOrientation(orientationBtn);
-  displayBoard(humanBoardDiv, name);
+  displayBoard(humanBoardDiv, player);
 }
 
 function getOrientation(orientationBtn) {
@@ -33,7 +38,7 @@ function getOrientation(orientationBtn) {
 }
 
 function displayBoard(humanBoardDiv, name) {
-  humanBoardDiv.innerHTML = ""; // Clear any existing content
+  humanBoardDiv.innerHTML = "";
 
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
@@ -49,12 +54,34 @@ function displayBoard(humanBoardDiv, name) {
   humanBoardDiv.style.display = "grid";
 }
 
-function handleCellClick(e, name) {
-  const x = e.target.dataset.x;
-  const y = e.target.dataset.y;
+function handleCellClick(e, player) {
+  const x = parseInt(e.target.dataset.x);
+  const y = parseInt(e.target.dataset.y);
   console.log(`Cell clicked: x=${x}, y=${y}`);
 
-  //const player = new Player(name, false);
-  //player.placeShipOnBoard("shipOne", x, y, "horizontal");
-  //console.log(player.gameBoard.board);
+  const currentShip = ships[currentIndex];
+  const currentShipName = currentShip.name;
+  const currentShipLength = currentShip.length;
+
+  const placed = player.placeShipOnBoard(currentShipName, x, y, "horizontal");
+  console.log(player.gameBoard.board);
+
+  if (placed) {
+    colorShipOnBoard(x, y, currentShipLength, "horizontal");
+    currentIndex++;
+  }
+}
+
+function colorShipOnBoard(x, y, length, orientation) {
+  for (let i = 0; i < length; i++) {
+    let cell;
+    if (orientation === "horizontal") {
+      cell = document.querySelector(`[data-x="${x + i}"][data-y="${y}"]`);
+    } else {
+      cell = document.querySelector(`[data-x="${x}"][data-y="${y + i}"]`);
+    }
+    if (cell) {
+      cell.style.backgroundColor = "blue";
+    }
+  }
 }
