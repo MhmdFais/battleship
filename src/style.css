@@ -5,6 +5,12 @@
     --btn-color: #d4d4d4;
     --btn-hover-color: #b1afaf;
     --footer-name-color: rgb(78, 36, 36);
+    --box-hover-color: #d4d4d4;
+    --ship-bg-color: #a5b4fc;
+    --ship-hit-color: #f43f5e;
+    --ship-sunk-color: #1f2937;
+    --missed-color: #2dd4bf;
+    --surrond-color: #94a3b8;
 }
 
 *{
@@ -26,6 +32,7 @@ body{
 .body-part-conatiner{
     height: 100dvh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: clamp(1rem, 1vh, 2rem);
@@ -114,45 +121,95 @@ form button:hover{
 
 /* Boards */
 
-.board{
+.boards-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+}
+
+.human-board-container,
+.computer-board-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    align-items: center;
+    justify-items: center;
+    gap: 0.1rem;
+    border: 0.1rem solid black;
+    width: 30vw;
+    height: 30vw;
+    overflow: visible;
+    position: relative;
+}
+
+.box{
+    width: 3vw;
+    height: 3vw;
+    border: 0.1rem solid black;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: clamp(0.5rem, 1vw, 1.5rem);
+    font-family: mainFont;
+    transition: background-color 0.3s ease;
+    cursor: crosshair;
 }
 
-.human-board,
-.computer-board{
-    padding-top: 2vh;
-    display: grid;
-    grid-template-columns: repeat(10, clamp(2.5vw, 3.5vh, 4.5vw));
-    grid-template-rows: repeat(10, clamp(2.5vw, 3.5vh, 4.5vw));
-    gap: 0.1rem;
-    /* width: 30vw;
-    height: 30vw; */
-    /* border: 0.1rem solid black; */
-    /* border-radius: 0.5rem; */
-    /* box-shadow: 0 0 0.4rem var(--name-container-shadow-color); */
+.box:hover{
+    background-color: var(--box-hover-color);
 }
 
-.human-board div,
-.computer-board div {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #000;
-    box-sizing: border-box;
+/* Ships */
+
+.ship{
+    background-color: var(--ship-bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.5rem, 1vw, 1.5rem);
+    font-family: mainFont;
+    /* cursor: crosshair; */
 }
 
-.ship {
-  background-color: #00f;
+.ship.hit{
+    background-color: var(--ship-hit-color);
+    font-size: clamp(0.5rem, 1vw, 1.5rem);
 }
 
-.miss {
-  background-color: #f00;
+.ship.sunk{
+    background-color: var(--ship-sunk-color);
+    cursor: default;
+    font-size: clamp(0.5rem, 1vw, 1.5rem);
+    border: 1px solid var(--ship-hit-color);
 }
 
-.hit {
-  background-color: #0f0;
+.missed{
+    background-color: var(--missed-color);
 }
+
+.surround{
+    background-color: var(--surrond-color);
+}
+
+/* Buttons */
+
+.buttons-container button{
+    padding: 1vh 2vw;
+    font-size: clamp(0.75rem, 1.3vw, 1.75rem);
+    font-family: mainFont;
+    border: none;
+    cursor: pointer;
+    background-color: var(--btn-color);
+    box-shadow: 0 0 0.78rem var(--name-container-shadow-color);
+}
+
+.buttons-container button:hover{
+    /* background-color: var(--btn-hover-color); */
+    box-shadow: none;
+
+}
+
 
 /* Footer */
 footer{
