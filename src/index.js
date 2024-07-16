@@ -1,4 +1,5 @@
 import "./style.css";
+import { GameBoard } from "./back-end/gameBoard";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameContainer = document.querySelector(".name-container");
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function enablePlayerBoardDisplay(name) {
     enableDisplay();
     showMessage(name);
+    startGame();
     //generateBoardS(humanBoard);
     //generateBoardS(computerBoard);
   }
@@ -35,6 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function enableDisplay() {
     humanBoardContainer.style.display = "block";
     buttonsContainer.style.display = "block";
+  }
+
+  function startGame() {
+    const game = new GameBoard();
+    //game.generateBoard(humanBoard);
   }
 
   // function generateBoardS(boardElement) {
