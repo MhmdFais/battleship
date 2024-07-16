@@ -2,19 +2,23 @@ class Ship {
   constructor(length) {
     this.length = length;
     this.number_hit = 0;
-    this.sunk = false;
+    this.isSunk = false;
   }
-  getStatus() {
-    return { length: this.length, hit: this.number_hit, sunk: this.sunk };
-  }
+
   hit() {
-    if (!this.sunk) {
-      this.number_hit++;
-      this.sunk = this.isSunk();
+    if (this.isSunk) {
+      return;
+    }
+    this.number_hit += 1;
+    if (this.number_hit === this.length) {
+      this.isSunk = true;
     }
   }
+
   isSunk() {
-    return this.number_hit === this.length;
+    if (this.number_hit === this.length) {
+      return true;
+    }
   }
 }
 
