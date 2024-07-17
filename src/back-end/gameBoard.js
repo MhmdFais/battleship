@@ -48,12 +48,28 @@ class GameBoard {
           return false;
         }
       }
+      for (let i = col; i < col + length; i++) {
+        if (row > 0 && this.board[row - 1][i] !== null) {
+          return false;
+        }
+        if (row < 9 && this.board[row + 1][i] !== null) {
+          return false;
+        }
+      }
     } else {
       if (row + length > 10) {
         return false;
       }
       for (let i = row; i < row + length; i++) {
         if (this.board[i][col] !== null) {
+          return false;
+        }
+      }
+      for (let i = row; i < row + length; i++) {
+        if (col > 0 && this.board[i][col - 1] !== null) {
+          return false;
+        }
+        if (col < 9 && this.board[i][col + 1] !== null) {
           return false;
         }
       }
