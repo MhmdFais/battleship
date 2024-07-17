@@ -2,10 +2,13 @@
 
 This is a simple game of battleship. The game is played on a 10x10 grid. The player and the computer each have a grid. The player places their ships on their grid and the computer places their ships on their grid. The player and the computer take turns guessing the location of the other player's ships. The first player to sink all of the other player's ships wins.
 
-## ScreenShot 
+## live link
+
+[Live link](https://mhmdfais.github.io/battleship/)
+
+## ScreenShot
 
 ![image](https://github.com/user-attachments/assets/e173a2bb-c14f-4ec7-a38c-a6ce6df5a3b3)
-
 
 ## How to Play
 
