@@ -1,5 +1,6 @@
 import "./style.css";
 import { GameBoard } from "./back-end/gameBoard";
+import { Game } from "./front-end/game";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameContainer = document.querySelector(".name-container");
@@ -7,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("#get-name");
 
   const humanBoardContainer = document.querySelector(".human-board-container");
+  const computerBoardContainer = document.querySelector(
+    ".computer-board-container"
+  );
   const boardArrangeText = document.querySelector(".user-board-arrange-text");
   const buttonsContainer = document.querySelector(".buttons-container");
 
@@ -25,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function enablePlayerBoardDisplay(name) {
     enableDisplay();
     showMessage(name);
-    startGame();
+    startGame(name);
     //generateBoardS(humanBoard);
     //generateBoardS(computerBoard);
   }
@@ -36,32 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function enableDisplay() {
     humanBoardContainer.style.display = "block";
+    computerBoardContainer.style.display = "block";
     buttonsContainer.style.display = "block";
   }
 
-  function startGame() {
-    const game = new GameBoard();
-    //game.generateBoard(humanBoard);
+  function startGame(name) {
+    const game = new Game(name);
+    game.startGame();
   }
-
-  // function generateBoardS(boardElement) {
-  //   const humanBoardContainer = document.querySelector(
-  //     ".human-board-container"
-  //   );
-  //   humanBoard.style.display = "grid";
-
-  //   for (let row = 0; row < 10; row++) {
-  //     for (let col = 0; col < 10; col++) {
-  //       const cell = document.createElement("div");
-  //       cell.classList.add("cell");
-  //       cell.classList.add("box");
-  //       cell.dataset.row = row;
-  //       cell.dataset.col = col;
-  //       boardElement.appendChild(cell);
-  //     }
-  //   }
-
-  //   boardElement.style.gridTemplateRows = `repeat(10, 1fr)`;
-  //   boardElement.style.gridTemplateColumns = `repeat(10, 1fr)`;
-  // }
 });

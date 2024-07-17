@@ -11,24 +11,35 @@ class Game {
     this.humanPlayer = new Player(this.humanPlayer.name, false);
     this.computerPlayer = new Player("Computer", true);
     this.isHumanPlayerTurn = true;
-    this.placeShips();
+    this.placeHumanPlayerShips();
+    this.placeComputerPlayerShips();
     this.displayBoards();
   }
 
   startGame() {
-    this.placeShips();
+    this.displayBoards();
+    this.placeHumanPlayerShips();
+    this.placeComputerPlayerShips();
+  }
+
+  createAndRandomizeOnlyPlayerBoardAndShips() {
+    this.placeHumanPlayerShips();
     this.displayBoards();
   }
 
   displayBoards() {
-    generateGameBoards(this.humanPlayer.gameBoard.board, "human", false);
-    generateGameBoards(this.computerPlayer.gameBoard.board, "computer", true);
+    this.generateGameBoards(this.humanPlayer.gameBoard.board, "human", false);
+    this.generateGameBoards(
+      this.computerPlayer.gameBoard.board,
+      "computer",
+      true
+    );
   }
 
   generateGameBoards(board, playerType, isComputer) {
-    const board = getTheBoardContainer(playerType);
-    board.innerHTML = "";
-    board.style.display = "grid";
+    const boardContainer = this.getTheBoardContainer(playerType);
+    boardContainer.innerHTML = "";
+    boardContainer.style.display = "grid";
 
     board.forEach((row, rowIndex) => {
       row.forEach((col, colIndex) => {
@@ -52,9 +63,9 @@ class Game {
 
   getTheBoardContainer(playerType) {
     if (playerType === "human") {
-      return document.querySelector(".human-board");
+      return document.querySelector(".human-board-container");
     } else {
-      return document.querySelector(".computer-board");
+      return document.querySelector(".computer-board-container");
     }
   }
 
@@ -97,8 +108,10 @@ class Game {
     const result = this.computerPlayer.gameBoard.receiveAttack(row, col);
 
     if (result === "hit") {
+      e.target.classList.add("hit");
       e.target.textContent = "💥";
     } else {
+      e.target.classList.add("miss");
       e.target.textContent = "❌";
     }
 
@@ -110,8 +123,11 @@ class Game {
     this.computerPlayerTurn();
   }
 
-  placeShips() {
+  placeHumanPlayerShips() {
     this.humanPlayer.gameBoard.placeShipRandomly();
+  }
+
+  placeComputerPlayerShips() {
     this.computerPlayer.gameBoard.placeShipRandomly();
   }
 }
