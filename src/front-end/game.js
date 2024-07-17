@@ -61,7 +61,8 @@ function createGame(name) {
 
     if (!isComputer && cell === "ship") {
       cellElement.classList.add("own-ship");
-      cellElement.style.backgroundColor = "#64748b";
+      cellElement.style.backgroundColor = "#94a3b8";
+      cellElement.style.border = "0.4px solid #64748b";
     }
 
     if (isComputer && !isGameFinished()) {
