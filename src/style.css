@@ -146,7 +146,7 @@ form button:hover{
 .box{
     width: 3vw;
     height: 3vw;
-    border: 0.1rem solid black;
+    border: 0.08rem solid #94a3b8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -208,6 +208,21 @@ form button:hover{
     /* background-color: var(--btn-hover-color); */
     box-shadow: none;
 
+}
+
+/* Board Text */
+
+.text-containers{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.computer-text,
+.human-text{
+    font-size: clamp(1rem, 1.5vw, 2rem);
+    font-family: mainFont;
+    padding-bottom: 2vh;
 }
 
 

@@ -52,13 +52,16 @@ function createGame(name) {
     if (cell === "hit") {
       cellElement.classList.add("hit");
       cellElement.textContent = "💥";
+      cellElement.style.backgroundColor = "#475569";
     } else if (cell === "miss") {
       cellElement.classList.add("miss");
       cellElement.textContent = "❌";
+      cellElement.style.backgroundColor = "#cbd5e1";
     }
 
     if (!isComputer && cell === "ship") {
       cellElement.classList.add("own-ship");
+      cellElement.style.backgroundColor = "#64748b";
     }
 
     if (isComputer && !isGameFinished()) {
