@@ -1,26 +1,21 @@
-export const ships = [
-  { name: "shipOne", length: 5, hits: 0, isSunk: false },
-  { name: "shipTwo", length: 4, hits: 0, isSunk: false },
-  { name: "shipThree", length: 3, hits: 0, isSunk: false },
-  { name: "shipFour", length: 3, hits: 0, isSunk: false },
-  { name: "shipFive", length: 2, hits: 0, isSunk: false },
-];
-
-export function hitShip(shipName) {
-  const ship = ships.find((ship) => ship.name === shipName);
-  if (!ship) {
-    console.log("Incorrect ship name");
-    return false;
+class Ship {
+  constructor(length, name) {
+    this.length = length;
+    this.name = name;
+    this.number_hit = 0;
+    this.isSunk = false;
   }
-  ship.hits++;
-  return isSunken(ship);
-}
 
-function isSunken(ship) {
-  if (ship.hits >= ship.length) {
-    ship.isSunk = true;
-    return true;
-  } else {
-    return false;
+  hit() {
+    this.number_hit += 1;
+    if (this.number_hit === this.length) {
+      this.isSunk = true;
+    }
+  }
+
+  isSunk() {
+    return this.isSunk;
   }
 }
+
+export { Ship };

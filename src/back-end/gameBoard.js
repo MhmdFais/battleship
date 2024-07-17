@@ -1,117 +1,154 @@
-import { ships } from "./ship";
-import { hitShip } from "./ship";
+import { Ship } from "./ship";
 
-const BOARD_SIZE = 10;
-
-export class GameBoard {
+class GameBoard {
   constructor() {
-    this.board = Array(BOARD_SIZE)
-      .fill(null)
-      .map(() => Array(BOARD_SIZE).fill(null));
-    this.ships = [...ships];
-    this.missedAttacks = [];
-    this.hitAttacks = [];
+    this.board = this.generateBoard();
+    this.shipOne = new Ship(5, "one");
+    this.shipTwo = new Ship(4, "two");
+    this.shipThree = new Ship(3, "three");
+    this.shipFour = new Ship(3, "four");
+    this.shipFive = new Ship(2, "five");
+
+    this.ships = [
+      this.shipOne,
+      this.shipTwo,
+      this.shipThree,
+      this.shipFour,
+      this.shipFive,
+    ];
   }
 
-  placeShip(shipName, x, y, direction) {
-    const ship = this.ships.find((ship) => ship.name === shipName);
-    if (!ship) {
-      console.log("Incorrect ship name");
-      return false;
+  generateBoard() {
+    const board = [];
+    for (let i = 0; i < 10; i++) {
+      board.push(Array(10).fill(null));
     }
-
-    if (this.isShipPlaced(shipName)) {
-      console.log("Ship already placed");
-      return false;
-    }
-
-    if (this.isShipOutOfBounds(ship, x, y, direction)) {
-      console.log("Ship out of bounds");
-      return false;
-    }
-
-    if (this.isShipColliding(ship, x, y, direction)) {
-      console.log("Ship colliding with another ship");
-      return false;
-    }
-
-    for (let i = 0; i < ship.length; i++) {
-      if (direction === "horizontal") {
-        this.board[y][x + i] = ship.name;
-      } else {
-        this.board[y + i][x] = ship.name;
-      }
-    }
-
-    return true;
+    return board;
   }
 
-  isShipPlaced(shipName) {
-    return this.board.flat().includes(shipName);
+  generateDirection() {
+    return Math.random() < 0.5 ? "horizontal" : "vertical";
   }
 
-  isShipOutOfBounds(ship, x, y, direction) {
+  generateRowCoordinate() {
+    return Math.floor(Math.random() * 10);
+  }
+
+  generateColumnCoordinate() {
+    return Math.floor(Math.random() * 10);
+  }
+
+  checkValidPlacement(row, col, direction, length) {
     if (direction === "horizontal") {
-      return x + ship.length > BOARD_SIZE;
-    } else {
-      return y + ship.length > BOARD_SIZE;
-    }
-  }
-
-  isShipColliding(ship, x, y, direction) {
-    for (let i = 0; i < ship.length; i++) {
-      if (direction === "horizontal") {
-        if (this.board[y][x + i]) {
-          return true;
+      if (col + length > 10) {
+        return false;
+      }
+      for (let i = col; i < col + length; i++) {
+        if (this.board[row][i] !== null) {
+          return false;
         }
-      } else {
-        if (this.board[y + i][x]) {
-          return true;
+      }
+    } else {
+      if (row + length > 10) {
+        return false;
+      }
+      for (let i = row; i < row + length; i++) {
+        if (this.board[i][col] !== null) {
+          return false;
         }
       }
     }
-    return false;
-  }
-
-  removeShip(shipName) {
-    if (!this.isShipPlaced(shipName)) {
-      console.log("Ship not placed");
-      return false;
-    }
-
-    const ship = this.ships.find((ship) => ship.name === shipName);
-    if (ship) {
-      ship.hits = 0;
-      ship.isSunk = false;
-    }
-
-    this.board = this.board.map((row) =>
-      row.map((cell) => (cell === shipName ? null : cell))
-    );
     return true;
   }
 
-  receiveAttack(x, y) {
-    if (this.board[y][x] === null) {
-      this.missedAttacks.push({ x, y });
-      //this.board[y][x] = "miss";
-      return false;
+  placeShip(row, col, direction, length) {
+    if (direction === "horizontal") {
+      for (let i = col; i < col + length; i++) {
+        this.board[row][i] = "ship";
+      }
+    } else {
+      for (let i = row; i < row + length; i++) {
+        this.board[i][col] = "ship";
+      }
+    }
+  }
+
+  placeShipRandomly() {
+    this.ships.forEach((ship) => {
+      let placed = false;
+      while (!placed) {
+        const direction = this.generateDirection();
+        const row = this.generateRowCoordinate();
+        const col = this.generateColumnCoordinate();
+        if (this.checkValidPlacement(row, col, direction, ship.length)) {
+          this.placeShip(row, col, direction, ship.length);
+          placed = true;
+        }
+      }
+    });
+  }
+
+  // for human player
+  receiveAttack(row, col) {
+    if (this.board[row][col] === "hit" || this.board[row][col] === "miss") {
+      //throw new Error("You have already attacked this position");
+      return;
     }
 
-    const shipName = this.board[y][x];
-    this.hitAttacks.push({ x, y });
-    //this.board[y][x] = "hit";
-    const isSunk = hitShip(shipName);
-    if (isSunk) {
-      this.ships = this.ships.filter((ship) => ship.name !== shipName);
-      console.log("Ship sunk");
+    if (this.board[row][col] === "ship") {
+      this.board[row][col] = "hit";
+      //this.changeCellInnerHTML(row, col, "hit");
+      this.ships.forEach((ship) => {
+        if (ship.length === 0) {
+          return;
+        }
+        if (this.isSunk(row, col, ship.length, ship.direction)) {
+          ship.isSunk = true;
+        }
+      });
+      return "hit";
+    } else {
+      this.board[row][col] = "miss";
+      //this.changeCellInnerHTML(row, col, "miss");
+      return "miss";
+    }
+  }
+
+  // for computer player
+  receiveAttackRandomly() {
+    let attacked = false;
+    let result;
+    while (!attacked) {
+      const row = this.generateRowCoordinate();
+      const col = this.generateColumnCoordinate();
+      result = this.receiveAttack(row, col);
+      if (result === "hit" || result === "miss") {
+        attacked = true;
+      }
+    }
+    return result;
+  }
+
+  isSunk(row, col, length, direction) {
+    if (direction === "horizontal") {
+      for (let i = col; i < col + length; i++) {
+        if (this.board[row][i] !== "hit") {
+          return false;
+        }
+      }
+    } else {
+      for (let i = row; i < row + length; i++) {
+        if (this.board[i][col] !== "hit") {
+          return false;
+        }
+      }
     }
     return true;
   }
 
-  allShipsSunk() {
-    //return this.ships.length === 0;
-    this.ships.every((ship) => ship.isSunk);
-    return true;
+  hasAllShipsSunk() {
+    return this.ships.every((ship) => ship.isSunk);
   }
 }
+
+export { GameBoard };
