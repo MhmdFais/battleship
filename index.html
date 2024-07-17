@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BattleShip</title>
+    <link rel="stylesheet" href="../src/style.css" />
+    <script src="./main.js" defer></script>
+  </head>
+  <body>
+    <div class="body-part-conatiner">
+      <div class="name-container">
+        <p class="enter-name-text">Enter Your Name</p>
+        <form action="#" id="get-name">
+          <input type="text" id="name" />
+          <button type="submit" id="name-btn">Start Game</button>
+          <!-- Confirm Name Text -->
+        </form>
+      </div>
+      <div class="welcome-text">
+        <p class="user-board-arrange-text"></p>
+      </div>
+      <div class="boards-container">
+        <div class="human-board-container" style="display: none">
+          <div class="text-containers">
+            <p class="human-text"></p>
+          </div>
+          <div class="human-board board"></div>
+        </div>
+        <div class="computer-board-container" style="display: none">
+          <div class="text-containers">
+            <p class="computer-text"></p>
+          </div>
+          <!-- AI -->
+          <div class="computer-board board"></div>
+        </div>
+      </div>
+      <div class="buttons-container" style="display: none">
+        <button class="randomize button">Randomize</button>
+        <button class="start button">Start</button>
+      </div>
+    </div>
+  </body>
+  <footer>
+    Developed By
+    <img
+      src="../src/assets/images/Pictogrammers-Material-Github.512.png"
+      id="git-logo"
+    />
+    <a href="https://github.com/MhmdFais" target="_blank">Muhammed</a>
+  </footer>
+</html>
