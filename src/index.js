@@ -1,6 +1,6 @@
 import "./style.css";
 import { GameBoard } from "./back-end/gameBoard";
-import { Game } from "./front-end/game";
+import { createGame } from "./front-end/game";
 
 document.addEventListener("DOMContentLoaded", () => {
   const nameContainer = document.querySelector(".name-container");
@@ -17,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const humanBoard = document.querySelector(".human-board");
   const computerBoard = document.querySelector(".computer-board");
 
+  const humanText = document.querySelector(".human-text");
+  const computerText = document.querySelector(".computer-text");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const name = nameTextBox.value;
@@ -28,10 +31,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function enablePlayerBoardDisplay(name) {
     enableDisplay();
-    showMessage(name);
+    //showMessage(name);
     startGame(name);
+    showBoardsNames(humanText, name);
+    showBoardsNames(computerText, "Computer");
     //generateBoardS(humanBoard);
     //generateBoardS(computerBoard);
+  }
+
+  function showBoardsNames(element, name) {
+    element.textContent = `${name}'s Board`;
   }
 
   function showMessage(name) {
@@ -41,11 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function enableDisplay() {
     humanBoardContainer.style.display = "block";
     computerBoardContainer.style.display = "block";
-    buttonsContainer.style.display = "block";
+    //buttonsContainer.style.display = "block";
   }
 
   function startGame(name) {
-    const game = new Game(name);
+    const game = createGame(name);
     game.startGame();
   }
 });

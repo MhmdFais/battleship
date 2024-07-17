@@ -128,7 +128,7 @@ form button:hover{
     gap: 2rem;
 }
 
-.human-board-container,
+/* .human-board-container,
 .computer-board-container {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -141,7 +141,7 @@ form button:hover{
     height: 30vw;
     overflow: visible;
     position: relative;
-}
+} */
 
 .box{
     width: 3vw;

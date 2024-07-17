@@ -1,59 +1,34 @@
 import { Player } from "../back-end/player";
 
-class Game {
-  constructor(name) {
-    this.humanPlayer = new Player(name, false);
-    this.computerPlayer = new Player("Computer", true);
-    this.isHumanPlayerTurn = true;
+function createGame(name) {
+  let humanPlayer = new Player(name, false);
+  let computerPlayer = new Player("Computer", true);
+  let isHumanPlayerTurn = true;
+
+  function placeShips() {
+    humanPlayer.gameBoard.placeShipRandomly();
+    computerPlayer.gameBoard.placeShipRandomly();
   }
 
-  restartGame() {
-    this.humanPlayer = new Player(this.humanPlayer.name, false);
-    this.computerPlayer = new Player("Computer", true);
-    this.isHumanPlayerTurn = true;
-    this.placeHumanPlayerShips();
-    this.placeComputerPlayerShips();
-    this.displayBoards();
+  function displayBoards() {
+    generateGameBoards(humanPlayer.gameBoard.board, "human", false);
+    generateGameBoards(computerPlayer.gameBoard.board, "computer", true);
   }
 
-  startGame() {
-    this.displayBoards();
-    this.placeHumanPlayerShips();
-    this.placeComputerPlayerShips();
-  }
-
-  createAndRandomizeOnlyPlayerBoardAndShips() {
-    this.placeHumanPlayerShips();
-    this.displayBoards();
-  }
-
-  displayBoards() {
-    this.generateGameBoards(this.humanPlayer.gameBoard.board, "human", false);
-    this.generateGameBoards(
-      this.computerPlayer.gameBoard.board,
-      "computer",
-      true
-    );
-  }
-
-  generateGameBoards(board, playerType, isComputer) {
-    const boardContainer = this.getTheBoardContainer(playerType);
+  function generateGameBoards(board, playerType, isComputer) {
+    const boardContainer = getTheBoardContainer(playerType);
     boardContainer.innerHTML = "";
     boardContainer.style.display = "grid";
 
     board.forEach((row, rowIndex) => {
-      row.forEach((col, colIndex) => {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.classList.add("box");
-        cell.dataset.row = rowIndex;
-        cell.dataset.col = colIndex;
-        cell.textContent = col;
-        cell.addEventListener(
-          "click",
-          this.handleCellClick.bind(this, playerType)
+      row.forEach((cell, colIndex) => {
+        const cellElement = createCellElement(
+          rowIndex,
+          colIndex,
+          cell,
+          isComputer
         );
-        board.appendChild(cell);
+        boardContainer.appendChild(cellElement);
       });
     });
 
@@ -61,75 +36,116 @@ class Game {
     boardContainer.style.gridTemplateColumns = `repeat(10, 1fr)`;
   }
 
-  getTheBoardContainer(playerType) {
+  function getTheBoardContainer(playerType) {
     if (playerType === "human") {
-      return document.querySelector(".human-board-container");
+      return document.querySelector(".human-board");
     } else {
-      return document.querySelector(".computer-board-container");
+      return document.querySelector(".computer-board");
     }
   }
 
-  isGameFinished() {
+  function createCellElement(rowIndex, colIndex, cell, isComputer) {
+    const cellElement = document.createElement("div");
+    cellElement.classList.add("cell");
+    cellElement.classList.add("box");
+
+    if (cell === "hit") {
+      cellElement.classList.add("hit");
+      cellElement.textContent = "💥";
+    } else if (cell === "miss") {
+      cellElement.classList.add("miss");
+      cellElement.textContent = "❌";
+    }
+
+    if (!isComputer && cell === "ship") {
+      cellElement.classList.add("own-ship");
+    }
+
+    if (isComputer && !isGameFinished()) {
+      cellElement.addEventListener("click", () => {
+        if (isHumanPlayerTurn) {
+          computerPlayer.gameBoard.receiveAttack(rowIndex, colIndex);
+          attackHumanPlayer(humanPlayer.gameBoard);
+          updateTheBoard(true);
+        }
+      });
+    }
+
+    return cellElement;
+  }
+
+  function attackHumanPlayer(humanGameBoard) {
+    const row = Math.floor(Math.random() * 10);
+    const col = Math.floor(Math.random() * 10);
+
+    if (
+      humanGameBoard.board[row][col] === "hit" ||
+      humanGameBoard.board[row][col] === "miss"
+    ) {
+      return;
+    } else {
+      humanGameBoard.receiveAttack(row, col);
+    }
+  }
+
+  function updateTheBoard(isComputer) {
+    isHumanPlayerTurn = !isHumanPlayerTurn;
+
+    if (isGameFinished()) {
+      const humanStatus = humanPlayer.gameBoard.hasAllShipsSunk();
+      const computerStatus = computerPlayer.gameBoard.hasAllShipsSunk();
+
+      if (humanStatus && computerStatus) {
+        displayWinner("draw");
+      } else if (humanStatus) {
+        displayWinner("computer");
+      } else {
+        displayWinner("human");
+      }
+
+      generateGameBoards(humanPlayer.gameBoard.board, "human", false);
+      generateGameBoards(computerPlayer.gameBoard.board, "computer", false);
+
+      return;
+    }
+
+    generateGameBoards(computerPlayer.gameBoard.board, "computer", true);
+
+    setTimeout(() => {
+      generateGameBoards(humanPlayer.gameBoard.board, "human", false);
+      isHumanPlayerTurn = true;
+    }, 1000);
+  }
+
+  function isGameFinished() {
     return (
-      this.humanPlayer.gameBoard.hasAllShipsSunk() ||
-      this.computerPlayer.gameBoard.hasAllShipsSunk()
+      humanPlayer.gameBoard.hasAllShipsSunk() ||
+      computerPlayer.gameBoard.hasAllShipsSunk()
     );
   }
 
-  changeTurn() {
-    this.isHumanPlayerTurn = !this.isHumanPlayerTurn;
-  }
+  function displayWinner(winner) {
+    const message = document.querySelector(".user-board-arrange-text");
+    message.textContent = "";
+    message.style.display = "block";
 
-  computerPlayerTurn() {
-    if (!this.isHumanPlayerTurn) {
-      setTimeout(() => {
-        this.computerPlayerMove();
-      }, 1000);
-    }
-  }
-
-  computerPlayerMove() {
-    const result = this.humanPlayer.gameBoard.receiveAttackRandomly();
-    if (this.humanPlayer.gameBoard.hasAllShipsSunk()) {
-      alert("Computer has won the game");
-      return;
-    }
-    this.changeTurn();
-  }
-
-  handleCellClick(e, playerType) {
-    if (!this.isHumanPlayerTurn || playerType === "computer") {
-      return;
-    }
-
-    const row = e.target.dataset.row;
-    const col = e.target.dataset.col;
-
-    const result = this.computerPlayer.gameBoard.receiveAttack(row, col);
-
-    if (result === "hit") {
-      e.target.classList.add("hit");
-      e.target.textContent = "💥";
+    if (winner === "draw") {
+      message.textContent = "It's a draw";
+    } else if (winner === "computer") {
+      message.textContent = "Computer won the game";
     } else {
-      e.target.classList.add("miss");
-      e.target.textContent = "❌";
+      message.textContent = `${name} won the game`;
     }
-
-    if (this.computerPlayer.gameBoard.hasAllShipsSunk()) {
-      alert("You have won the game");
-    }
-
-    this.changeTurn();
-    this.computerPlayerTurn();
   }
 
-  placeHumanPlayerShips() {
-    this.humanPlayer.gameBoard.placeShipRandomly();
+  function startGame() {
+    placeShips();
+    displayBoards();
   }
 
-  placeComputerPlayerShips() {
-    this.computerPlayer.gameBoard.placeShipRandomly();
-  }
+  return {
+    startGame,
+  };
 }
 
-export { Game };
+export { createGame };

@@ -88,6 +88,7 @@ class GameBoard {
     });
   }
 
+  // for human player
   receiveAttack(row, col) {
     if (this.board[row][col] === "hit" || this.board[row][col] === "miss") {
       //throw new Error("You have already attacked this position");
@@ -101,7 +102,7 @@ class GameBoard {
         if (ship.length === 0) {
           return;
         }
-        if (this.isSunk(ship)) {
+        if (this.isSunk(row, col, ship.length, ship.direction)) {
           ship.isSunk = true;
         }
       });
@@ -113,6 +114,7 @@ class GameBoard {
     }
   }
 
+  // for computer player
   receiveAttackRandomly() {
     let attacked = false;
     let result;
@@ -127,15 +129,21 @@ class GameBoard {
     return result;
   }
 
-  isSunk(ship) {
-    let sunk = true;
-    for (let i = 0; i < ship.length; i++) {
-      if (this.board[row][col] !== "hit") {
-        sunk = false;
-        break;
+  isSunk(row, col, length, direction) {
+    if (direction === "horizontal") {
+      for (let i = col; i < col + length; i++) {
+        if (this.board[row][i] !== "hit") {
+          return false;
+        }
+      }
+    } else {
+      for (let i = row; i < row + length; i++) {
+        if (this.board[i][col] !== "hit") {
+          return false;
+        }
       }
     }
-    return sunk;
+    return true;
   }
 
   hasAllShipsSunk() {
